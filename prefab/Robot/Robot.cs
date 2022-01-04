@@ -84,10 +84,13 @@ public class Robot : Spatial
 
         if (!(end is null))
         {
-            Spatial endSpatial = GetNode<Spatial>(end);
-            Pose4 position = Forward(generalized);
-            endSpatial.Translation = position.position;
-            endSpatial.Rotation = new Vector3(0, 0, position.rotation);
+            if (!end.IsEmpty())
+            {
+                Spatial endSpatial = GetNode<Spatial>(end);
+                Pose4 position = Forward(generalized);
+                endSpatial.Translation = position.position;
+                endSpatial.Rotation = new Vector3(0, 0, position.rotation);
+            }
         }
     }
 
@@ -110,5 +113,42 @@ public class Robot : Spatial
             new Vector3(wristProtrusion, 0, -wristDescent)
         );
         return new Pose4(pose.origin, generalized.a + generalized.d);
+    }
+
+    public static Generalized4? Inverse(Target4 target)
+    {
+        float a = Mathf.Atan2(
+            target.pose.position.y,
+            target.pose.position.x
+        );
+        float projectionRadius = Mathf.Sqrt(
+            Mathf.Pow(target.pose.position.x, 2) +
+            Mathf.Pow(target.pose.position.y, 2)
+        ) - wristProtrusion - protrusion;
+        float deltaZ = target.pose.position.z - lift + wristDescent;
+        float l1 = shoulderLength;
+        float l2 = forearmLength;
+        float p = Mathf.Sqrt(
+            deltaZ * deltaZ +
+            projectionRadius * projectionRadius
+        );
+        if (p > l1 + l2 || p < Mathf.Abs(l1 - l2))
+        {
+            return null;
+        }
+        float b =
+            Mathf.Pi / 2 -
+            Mathf.Acos((l1 * l1 + p * p - l2 * l2) / (2 * l1 * p)) -
+            Mathf.Atan2(deltaZ, projectionRadius);
+        float c = Mathf.Pi / 2 -
+            Mathf.Acos((l1 * l1 + l2 * l2 - p * p) / (2 * l1 * l2)) +
+            b;
+        float d = target.pose.rotation - a;
+        a = Mathf.Wrap(a, -Mathf.Pi, Mathf.Pi);
+        b = Mathf.Wrap(b, -Mathf.Pi, Mathf.Pi);
+        c = Mathf.Wrap(c, -Mathf.Pi, Mathf.Pi);
+        d = Mathf.Wrap(d, -Mathf.Pi, Mathf.Pi) +
+            2 * Mathf.Pi * target.flangeRevolutions;
+        return new Generalized4(a, b, c, d);
     }
 }
