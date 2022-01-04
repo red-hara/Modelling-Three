@@ -1,3 +1,5 @@
+using System;
+
 public struct Generalized4
 {
     public float a;
@@ -46,5 +48,44 @@ public struct Generalized4
             self.c - other.c,
             self.d - other.d
         );
+    }
+
+    public float this[int index]
+    {
+        get
+        {
+            switch (index)
+            {
+                case 0:
+                    return a;
+                case 1:
+                    return b;
+                case 2:
+                    return c;
+                case 3:
+                    return d;
+            }
+            throw new IndexOutOfRangeException();
+        }
+        set
+        {
+            switch (index)
+            {
+                case 0:
+                    a = value;
+                    break;
+                case 1:
+                    b = value;
+                    break;
+                case 2:
+                    c = value;
+                    break;
+                case 3:
+                    d = value;
+                    break;
+                default:
+                    throw new IndexOutOfRangeException();
+            }
+        }
     }
 }
