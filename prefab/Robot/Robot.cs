@@ -31,13 +31,32 @@ public class Robot : Spatial
     [Export]
     public NodePath columnConnector;
     [Export]
-    public float a;
+    public float A
+    {
+        get => Mathf.Rad2Deg(generalized.a);
+        set => generalized.a = Mathf.Deg2Rad(value);
+    }
+
     [Export]
-    public float b;
+    public float B
+    {
+        get => Mathf.Rad2Deg(generalized.b);
+        set => generalized.b = Mathf.Deg2Rad(value);
+    }
     [Export]
-    public float c;
+    public float C
+    {
+        get => Mathf.Rad2Deg(generalized.c);
+        set => generalized.c = Mathf.Deg2Rad(value);
+    }
     [Export]
-    public float d;
+    public float D
+    {
+        get => Mathf.Rad2Deg(generalized.d);
+        set => generalized.d = Mathf.Deg2Rad(value);
+    }
+
+    private Generalized4 generalized = new Generalized4();
 
     [Export]
     public NodePath end;
@@ -48,6 +67,10 @@ public class Robot : Spatial
 
     public override void _Process(float delta)
     {
+        float a = generalized.a;
+        float b = generalized.b;
+        float c = generalized.c;
+        float d = generalized.d;
         GetNode<Spatial>(column).Rotation = new Vector3(0, 0, a);
         GetNode<Spatial>(shoulder).Rotation = new Vector3(0, b, 0);
         GetNode<Spatial>(forearm).Rotation = new Vector3(0, c - b, 0);
@@ -62,7 +85,7 @@ public class Robot : Spatial
         if (!(end is null))
         {
             Spatial endSpatial = GetNode<Spatial>(end);
-            Pose4 position = Forward(new Generalized4(a, b, c, d));
+            Pose4 position = Forward(generalized);
             endSpatial.Translation = position.position;
             endSpatial.Rotation = new Vector3(0, 0, position.rotation);
         }

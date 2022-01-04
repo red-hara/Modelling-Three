@@ -1,16 +1,16 @@
 [gd_scene load_steps=13 format=2]
 
-[ext_resource path="res://models/Connector.obj" type="ArrayMesh" id=1]
-[ext_resource path="res://models/ForearmConnector.obj" type="ArrayMesh" id=2]
-[ext_resource path="res://models/Base.obj" type="ArrayMesh" id=3]
-[ext_resource path="res://models/Forearm.obj" type="ArrayMesh" id=4]
-[ext_resource path="res://models/Shoulder.obj" type="ArrayMesh" id=5]
-[ext_resource path="res://models/Column.obj" type="ArrayMesh" id=6]
-[ext_resource path="res://models/Flange.obj" type="ArrayMesh" id=7]
-[ext_resource path="res://models/Mover.obj" type="ArrayMesh" id=8]
-[ext_resource path="res://models/ColumnConnector.obj" type="ArrayMesh" id=9]
-[ext_resource path="res://models/Wrist.obj" type="ArrayMesh" id=10]
-[ext_resource path="res://models/WristConnector.obj" type="ArrayMesh" id=11]
+[ext_resource path="res://models/Robot/Connector.obj" type="ArrayMesh" id=1]
+[ext_resource path="res://models/Robot/ForearmConnector.obj" type="ArrayMesh" id=2]
+[ext_resource path="res://models/Robot/Base.obj" type="ArrayMesh" id=3]
+[ext_resource path="res://models/Robot/Forearm.obj" type="ArrayMesh" id=4]
+[ext_resource path="res://models/Robot/Shoulder.obj" type="ArrayMesh" id=5]
+[ext_resource path="res://models/Robot/Column.obj" type="ArrayMesh" id=6]
+[ext_resource path="res://models/Robot/Flange.obj" type="ArrayMesh" id=7]
+[ext_resource path="res://models/Robot/Mover.obj" type="ArrayMesh" id=8]
+[ext_resource path="res://models/Robot/ColumnConnector.obj" type="ArrayMesh" id=9]
+[ext_resource path="res://models/Robot/Wrist.obj" type="ArrayMesh" id=10]
+[ext_resource path="res://models/Robot/WristConnector.obj" type="ArrayMesh" id=11]
 [ext_resource path="res://prefab/Robot/Robot.cs" type="Script" id=12]
 
 [node name="Robot" type="Spatial"]
@@ -26,6 +26,7 @@ wristConnector = NodePath("Base/Column/Shoulder/Connector/WristConnector")
 mover = NodePath("Base/Column/Mover")
 forearmConnector = NodePath("Base/Column/Mover/ForearmConnector")
 columnConnector = NodePath("Base/Column/ColumnConnector")
+end = NodePath("")
 
 [node name="Base" type="Spatial" parent="."]
 
@@ -36,7 +37,6 @@ skeleton = NodePath("../..")
 material/0 = null
 
 [node name="Column" type="Spatial" parent="Base"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 
 [node name="Column" type="MeshInstance" parent="Base/Column"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0 )
