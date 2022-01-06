@@ -2,7 +2,7 @@ using Godot;
 
 public interface Positionable
 {
-    Generalized4? SetPosition(Vector3 position);
-    Generalized4? Inverse(Vector3 position);
-    Vector3 GetCurrentPosition();
+    Generalized4? SetPosition(Target4 position);
+    Generalized4? Inverse(Target4 position);
+    Target4 GetCurrentPosition();
 }

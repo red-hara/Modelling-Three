@@ -1,7 +1,7 @@
 using Godot;
 
 [Tool]
-public class Robot : Spatial
+public class Robot : Spatial, Controllable
 {
     public const float lift = 800;
     public const float protrusion = 300;
@@ -87,14 +87,49 @@ public class Robot : Spatial
             if (!end.IsEmpty())
             {
                 Spatial endSpatial = GetNode<Spatial>(end);
-                Pose4 position = Forward(generalized);
+                Pose4 position = CalculateForward(generalized).pose;
                 endSpatial.Translation = position.position;
-                endSpatial.Rotation = new Vector3(0, 0, position.rotation);
+                endSpatial.RotationDegrees = new Vector3(0, 0, position.rotation);
             }
         }
     }
 
-    public static Pose4 Forward(Generalized4 generalized)
+    public Target4? SetJoints(Generalized4 generalized)
+    {
+        this.generalized = generalized;
+        return CalculateForward(generalized);
+    }
+
+    public Target4? Forward(Generalized4 generalized)
+    {
+        return CalculateForward(generalized);
+    }
+
+    public Generalized4 GetCurrentJoints()
+    {
+        return generalized;
+    }
+
+    public Generalized4? SetPosition(Target4 position)
+    {
+        Generalized4? solution = CalculateInverse(position);
+        if (solution is null)
+        {
+            return null;
+        }
+        generalized = solution.Value;
+        return solution;
+    }
+    public Generalized4? Inverse(Target4 position)
+    {
+        return CalculateInverse(position);
+    }
+    public Target4 GetCurrentPosition()
+    {
+        return CalculateForward(generalized);
+    }
+
+    private static Target4 CalculateForward(Generalized4 generalized)
     {
         Transform pose = new Transform(
             new Quat(new Vector3(0, 0, 1), generalized.a),
@@ -112,10 +147,15 @@ public class Robot : Spatial
             new Quat(new Vector3(0, 0, 1), generalized.d),
             new Vector3(wristProtrusion, 0, -wristDescent)
         );
-        return new Pose4(pose.origin, generalized.a + generalized.d);
+        Pose4 pose4 = new Pose4(
+            pose.origin,
+            Mathf.Rad2Deg(generalized.a + generalized.d)
+        );
+        int rotations = Mathf.RoundToInt(generalized.d / 2 / Mathf.Pi);
+        return new Target4(pose4, rotations);
     }
 
-    public static Generalized4? Inverse(Target4 target)
+    private static Generalized4? CalculateInverse(Target4 target)
     {
         float a = Mathf.Atan2(
             target.pose.position.y,
@@ -143,7 +183,7 @@ public class Robot : Spatial
         float c = Mathf.Pi / 2 -
             Mathf.Acos((l1 * l1 + l2 * l2 - p * p) / (2 * l1 * l2)) +
             b;
-        float d = target.pose.rotation - a;
+        float d = Mathf.Deg2Rad(target.pose.rotation) - a;
         a = Mathf.Wrap(a, -Mathf.Pi, Mathf.Pi);
         b = Mathf.Wrap(b, -Mathf.Pi, Mathf.Pi);
         c = Mathf.Wrap(c, -Mathf.Pi, Mathf.Pi);
