@@ -3,7 +3,7 @@ using Godot;
 
 public class Controller : Node
 {
-    private Context context;
+    private Context context = new Context();
     private Queue<Command> commands = new Queue<Command>();
     private Command currentCommand;
 
@@ -13,8 +13,6 @@ public class Controller : Node
     public override void _Ready()
     {
         GeneratePath();
-        context.tool.position.y = 1000;
-        context.tool.position.z = 50;
     }
 
     public override void _Process(float delta)
@@ -65,6 +63,11 @@ public class Controller : Node
 
     public void GeneratePath()
     {
+        AddCommand(new SetTool(new Pose4(new Vector3(0, 0, 0), 0)));
+        AddCommand(
+            new Linear(new Pose4(new Vector3(2000, 0, 0), 0), 500, 90)
+        );
+        AddCommand(new SetTool(new Pose4(new Vector3(0, 1000, -50), 0)));
         AddCommand(
             new Linear(new Pose4(new Vector3(2000, 0, 0), 0), 500, 90)
         );

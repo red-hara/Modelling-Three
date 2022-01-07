@@ -1,4 +1,4 @@
-public struct Context
+public class Context
 {
     public Pose4 origin;
     public Pose4 part;
