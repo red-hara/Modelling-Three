@@ -38,7 +38,14 @@ script = ExtResource( 3 )
 
 [node name="Decor" type="Spatial" parent="."]
 
+[node name="Base" type="CSGBox" parent="Decor"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -500, 0 )
+width = 1000.0
+height = 1000.0
+depth = 1000.0
+
 [node name="Floor" type="CSGBox" parent="Decor"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1000, 0 )
 width = 10000.0
 height = 1.0
 depth = 10000.0

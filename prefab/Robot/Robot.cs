@@ -199,6 +199,15 @@ public class Robot : Spatial, Controllable
         c = Mathf.Wrap(c, -Mathf.Pi, Mathf.Pi);
         d = Mathf.Wrap(d, -Mathf.Pi, Mathf.Pi) +
             2 * Mathf.Pi * target.flangeRevolutions;
+
+        if (b > Mathf.Deg2Rad(85) || b < Mathf.Deg2Rad(-42))
+        {
+            return null;
+        }
+        if (c > Mathf.Deg2Rad(120) || c < Mathf.Deg2Rad(-20))
+        {
+            return null;
+        }
         return new Generalized4(a, b, c, d);
     }
 }
