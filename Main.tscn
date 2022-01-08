@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://prefab/Robot/Robot.tscn" type="PackedScene" id=1]
 [ext_resource path="res://code/Controller.cs" type="Script" id=2]
 [ext_resource path="res://code/Trace.cs" type="Script" id=3]
 [ext_resource path="res://code/Context.cs" type="Script" id=4]
 [ext_resource path="res://prefab/Tools/SimpleCone.tscn" type="PackedScene" id=5]
+[ext_resource path="res://prefab/SphereCamera/SphereCamera.tscn" type="PackedScene" id=6]
 
 [node name="Main" type="Spatial"]
 
@@ -23,13 +24,10 @@ tcpTrace = NodePath("../TcpTrace")
 [node name="Context" type="Node" parent="."]
 script = ExtResource( 4 )
 
-[node name="Camera" type="Camera" parent="."]
-transform = Transform( -1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 1000, -3000 )
-near = 100.0
-far = 10000.0
-
 [node name="TcpTrace" type="ImmediateGeometry" parent="."]
 script = ExtResource( 3 )
+
+[node name="SphereCamera" parent="." instance=ExtResource( 6 )]
 
 [node name="Decor" type="Spatial" parent="."]
 
