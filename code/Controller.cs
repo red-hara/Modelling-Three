@@ -31,6 +31,11 @@ public class Controller : Node
                     break;
                 case State.Done:
                     currentCommand = null;
+                    if (ctx.commands.Count > 0)
+                    {
+                        currentCommand = ctx.commands.Dequeue();
+                        currentCommand.Init(control, ctx);
+                    }
                     break;
                 case State.Error:
                     currentCommand = null;
@@ -44,7 +49,7 @@ public class Controller : Node
             currentCommand = ctx.commands.Dequeue();
             currentCommand.Init(control, ctx);
         }
-        ctx.Update(delta);
+        // ctx.Update(delta);
 
         Trace trace = GetNode<Trace>(tcpTrace);
         Spatial controlSpatial = (Spatial)control;
@@ -53,23 +58,8 @@ public class Controller : Node
                 Quat.Identity,
                 (
                     control.GetCurrentPosition().pose *
-                    ctx.tool
+                    ctx.Tool
                 ).position
             );
-    }
-
-    public void SetTool(Pose4 tool)
-    {
-        ctx.tool = tool;
-    }
-
-    public void SetPart(Pose4 part)
-    {
-        ctx.part = part;
-    }
-
-    public void AddCommand(Command command)
-    {
-        ctx.AddCommand(command);
     }
 }

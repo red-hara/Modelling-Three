@@ -23,6 +23,7 @@ tcpTrace = NodePath("../TcpTrace")
 
 [node name="Context" type="Node" parent="."]
 script = ExtResource( 4 )
+tool = NodePath("../Robot/SimpleCone")
 
 [node name="TcpTrace" type="ImmediateGeometry" parent="."]
 script = ExtResource( 3 )

@@ -25,7 +25,7 @@ public class Linear : Command
         this.controllable = controllable;
         this.context = context;
         start = controllable.GetCurrentPosition();
-        start.pose *= context.tool;
+        start.pose *= context.Tool;
     }
 
     public State Process(float delta)
@@ -41,7 +41,7 @@ public class Linear : Command
         if (progress >= 1)
         {
             if (controllable.SetPosition(
-                    new Target4(target * context.tool.Inverse(), 0)
+                    new Target4(target * context.Tool.Inverse(), 0)
                 ) is null)
             {
                 return State.Error;
@@ -50,7 +50,7 @@ public class Linear : Command
         }
 
         Pose4 interpolated = start.pose.Interpolate(target, progress) *
-            context.tool.Inverse();
+            context.Tool.Inverse();
         if (controllable.SetPosition(new Target4(interpolated, 0)) is null)
         {
             return State.Error;
