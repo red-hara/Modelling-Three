@@ -39,6 +39,9 @@ public class Context : Node
         AddCommand(
             new Linear(new Pose4(new Vector3(2000, 0, 100), 0), 500, 90)
         );
+
+        AddCommand(new InputWait(KeyList.Space));
+
         AddCommand(
             new Linear(new Pose4(new Vector3(2000, 0, 300), 90), 100, 45)
         );
@@ -55,6 +58,11 @@ public class Context : Node
         AddCommand(
             new ContextCommand(
                 (context) => { context.movingTool = !context.movingTool; }
+            )
+        );
+        AddCommand(
+            new ContextCommand(
+                (context) => { context.GeneratePath(); }
             )
         );
     }

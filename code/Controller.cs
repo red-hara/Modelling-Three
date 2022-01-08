@@ -44,10 +44,6 @@ public class Controller : Node
             currentCommand = ctx.commands.Dequeue();
             currentCommand.Init(control, ctx);
         }
-        else
-        {
-            ctx.GeneratePath();
-        }
         ctx.Update(delta);
 
         Trace trace = GetNode<Trace>(tcpTrace);
