@@ -129,6 +129,16 @@ public class Robot : Spatial, Controllable
         return CalculateForward(generalized);
     }
 
+    public Generalized4 MaximumJointVelocity()
+    {
+        return new Generalized4(
+            Mathf.Deg2Rad(130),
+            Mathf.Deg2Rad(130),
+            Mathf.Deg2Rad(130),
+            Mathf.Deg2Rad(300)
+        );
+    }
+
     private static Target4 CalculateForward(Generalized4 generalized)
     {
         Transform pose = new Transform(

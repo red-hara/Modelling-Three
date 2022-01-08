@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using Godot;
 
 public struct Generalized4
 {
@@ -28,6 +30,19 @@ public struct Generalized4
     public static Generalized4 operator *(Generalized4 generalized, float scale)
     {
         return scale * generalized;
+    }
+
+    public static Generalized4 operator /(
+        Generalized4 generalized,
+        Generalized4 velocity
+    )
+    {
+        return new Generalized4(
+            generalized.a / velocity.a,
+            generalized.b / velocity.b,
+            generalized.c / velocity.c,
+            generalized.d / velocity.d
+        );
     }
 
     public static Generalized4 operator +(Generalized4 self, Generalized4 other)
@@ -87,5 +102,20 @@ public struct Generalized4
                     throw new IndexOutOfRangeException();
             }
         }
+    }
+
+    public Generalized4 Abs()
+    {
+        return new Generalized4(
+            Mathf.Abs(a),
+            Mathf.Abs(b),
+            Mathf.Abs(c),
+            Mathf.Abs(d)
+        );
+    }
+
+    public float Max()
+    {
+        return new float[] { a, b, c, d }.Max();
     }
 }

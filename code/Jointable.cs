@@ -7,4 +7,6 @@ public interface Jointable
     Target4? Forward(Generalized4 generalized);
 
     Generalized4 GetCurrentJoints();
+
+    Generalized4 MaximumJointVelocity();
 }

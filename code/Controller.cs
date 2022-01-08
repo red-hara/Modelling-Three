@@ -65,23 +65,26 @@ public class Controller : Node
     {
         AddCommand(new SetTool(new Pose4(new Vector3(0, 0, 0), 0)));
         AddCommand(
-            new Linear(new Pose4(new Vector3(2000, 0, 0), 0), 500, 90)
+            new Joint(
+                new Target4(new Pose4(new Vector3(2000, 0, 0), 0), 0),
+                0.25f
+            )
         );
         AddCommand(new SetTool(new Pose4(new Vector3(0, 1000, -50), 0)));
         AddCommand(
             new Linear(new Pose4(new Vector3(2000, 0, 0), 0), 500, 90)
         );
         AddCommand(
-            new Linear(new Pose4(new Vector3(2000, 0, 200), 90), 100, 90)
+            new Linear(new Pose4(new Vector3(2000, 0, 200), 90), 100, 45)
         );
         AddCommand(
-            new Linear(new Pose4(new Vector3(2000, 0, 400), 180), 100, 90)
+            new Linear(new Pose4(new Vector3(2000, 0, 400), 180), 100, 45)
         );
         AddCommand(
-            new Linear(new Pose4(new Vector3(2000, 0, 600), 270), 100, 90)
+            new Linear(new Pose4(new Vector3(2000, 0, 600), 270), 100, 45)
         );
         AddCommand(
-            new Linear(new Pose4(new Vector3(2000, 0, 800), 360), 100, 90)
+            new Linear(new Pose4(new Vector3(2000, 0, 800), 360), 100, 45)
         );
     }
 
