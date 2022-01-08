@@ -1,18 +1,22 @@
-using System.Collections.Generic;
 using Godot;
 
 public class Controller : Node
 {
-    private Context context = new Context();
-    private Queue<Command> commands = new Queue<Command>();
+    [Export]
+    public NodePath context;
+    private Context ctx;
     private Command currentCommand;
 
     [Export]
     public NodePath controllable;
 
+    [Export]
+    public NodePath tcpTrace;
+
     public override void _Ready()
     {
-        GeneratePath();
+        ctx = GetNode<Context>(context);
+        ctx.GeneratePath();
     }
 
     public override void _Process(float delta)
@@ -27,69 +31,49 @@ public class Controller : Node
                     break;
                 case State.Done:
                     currentCommand = null;
-                    if (commands.Count > 0)
-                    {
-                        currentCommand = commands.Dequeue();
-                        currentCommand.Init(control, context);
-                    }
                     break;
                 case State.Error:
                     currentCommand = null;
-                    commands.Clear();
+                    ctx.commands.Clear();
                     GD.Print("Error!");
                     break;
             }
         }
-        else if (commands.Count > 0)
+        else if (ctx.commands.Count > 0)
         {
-            currentCommand = commands.Dequeue();
-            currentCommand.Init(control, context);
+            currentCommand = ctx.commands.Dequeue();
+            currentCommand.Init(control, ctx);
         }
         else
         {
-            GeneratePath();
+            ctx.GeneratePath();
         }
+        ctx.Update(delta);
+
+        Trace trace = GetNode<Trace>(tcpTrace);
+        Spatial controlSpatial = (Spatial)control;
+        trace.GlobalTransform = controlSpatial.GlobalTransform *
+            new Transform(
+                Quat.Identity,
+                (
+                    control.GetCurrentPosition().pose *
+                    ctx.tool
+                ).position
+            );
     }
 
     public void SetTool(Pose4 tool)
     {
-        context.tool = tool;
+        ctx.tool = tool;
     }
 
     public void SetPart(Pose4 part)
     {
-        context.part = part;
-    }
-
-    public void GeneratePath()
-    {
-        AddCommand(new SetTool(new Pose4(new Vector3(0, 0, 0), 0)));
-        AddCommand(
-            new Joint(
-                new Target4(new Pose4(new Vector3(2000, 0, 0), 0), 0),
-                0.25f
-            )
-        );
-        AddCommand(new SetTool(new Pose4(new Vector3(0, 1000, -50), 0)));
-        AddCommand(
-            new Linear(new Pose4(new Vector3(2000, 0, 0), 0), 500, 90)
-        );
-        AddCommand(
-            new Linear(new Pose4(new Vector3(2000, 0, 200), 90), 100, 45)
-        );
-        AddCommand(
-            new Linear(new Pose4(new Vector3(2000, 0, 400), 180), 100, 45)
-        );
-        AddCommand(
-            new Linear(new Pose4(new Vector3(2000, 0, 600), 270), 100, 45)
-        );
-        AddCommand(
-            new Linear(new Pose4(new Vector3(2000, 0, 800), 360), 100, 45)
-        );
+        ctx.part = part;
     }
 
     public void AddCommand(Command command)
     {
-        commands.Enqueue(command);
+        ctx.AddCommand(command);
     }
 }
