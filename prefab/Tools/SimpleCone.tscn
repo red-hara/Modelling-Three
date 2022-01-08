@@ -1,0 +1,23 @@
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="SpatialMaterial" id=1]
+flags_unshaded = true
+albedo_color = Color( 1, 0, 0, 1 )
+
+[node name="SimpleCone" type="Spatial"]
+
+[node name="CSGCylinder" type="CSGCylinder" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 500, -50 )
+radius = 50.0
+height = 1000.0
+cone = true
+
+[node name="CSGSphere" type="CSGSphere" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1000, -50 )
+radius = 25.0
+material = SubResource( 1 )
+
+[node name="SpotLight" type="SpotLight" parent="CSGSphere"]
+light_color = Color( 1, 0, 0, 1 )
+spot_range = 5000.0
+spot_angle = 1.0
