@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://prefab/Tools/SimpleCone.cs" type="Script" id=1]
+[ext_resource path="res://models/Axis/Axis.obj" type="ArrayMesh" id=2]
 
 [sub_resource type="SpatialMaterial" id=1]
 flags_unshaded = true
@@ -34,3 +35,12 @@ material = SubResource( 1 )
 light_color = Color( 1, 0, 0, 1 )
 spot_range = 5000.0
 spot_angle = 1.0
+
+[node name="Axis" type="MeshInstance" parent="CSGBox/Spatial/CSGCylinder/CSGSphere"]
+transform = Transform( 10, 0, 0, 0, -4.37114e-07, -10, 0, 10, -4.37114e-07, 0, 0, 0 )
+mesh = ExtResource( 2 )
+skeleton = NodePath("../../../../..")
+material/0 = null
+material/1 = null
+material/2 = null
+material/3 = null
