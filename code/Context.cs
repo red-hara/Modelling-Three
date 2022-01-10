@@ -19,9 +19,7 @@ public class Context : Node
         get => GetTool();
     }
 
-    public bool movingTool;
-    public float counter;
-
+    public bool workWithFlange;
 
     public void AddCommand(Command command)
     {
@@ -30,47 +28,37 @@ public class Context : Node
 
     override public void _Process(float delta)
     {
-        if (movingTool)
-        {
-            counter += delta;
-            SimpleCone simpleCone = GetNode<SimpleCone>(tool);
-            simpleCone.angle = 45 * Mathf.Sin(counter * Mathf.Pi / 4);
-        }
+
     }
 
     public void GeneratePath()
     {
+        AddCommand(new InputWait(KeyList.Space));
         AddCommand(
             new Joint(
-                new Target4(new Pose4(new Vector3(2000, 0, 100), 0), 0),
+                new Target4(new Pose4(new Vector3(0, 2100, 100), 0), 0),
                 0.25f
-            )
-        );
-        AddCommand(
-            new Linear(new Pose4(new Vector3(2000, 0, 100), 0), 500, 90)
-        );
-
-        AddCommand(
-            new ContextCommand(
-                (context) => { context.movingTool = true; }
             )
         );
         AddCommand(new InputWait(KeyList.Space));
         AddCommand(
-            new Linear(new Pose4(new Vector3(2000, 0, 300), 90), 100, 45)
+            new Linear(new Pose4(new Vector3(0, 2100, 300), 120), 100, 45)
         );
         AddCommand(
-            new Linear(new Pose4(new Vector3(2000, 0, 500), 180), 100, 45)
+            new Linear(new Pose4(new Vector3(0, 2100, 500), 240), 100, 45)
         );
         AddCommand(
-            new Linear(new Pose4(new Vector3(2000, 0, 700), 270), 100, 45)
+            new Linear(new Pose4(new Vector3(0, 2100, 700), 0), 100, 45)
         );
         AddCommand(
-            new Linear(new Pose4(new Vector3(2000, 0, 900), 360), 100, 45)
+            new Linear(new Pose4(new Vector3(0, 2100, 900), 120), 100, 45)
         );
         AddCommand(
             new ContextCommand(
-                (context) => { context.movingTool = false; }
+                (context) =>
+                {
+                    context.workWithFlange = !context.workWithFlange;
+                }
             )
         );
         AddCommand(
@@ -82,6 +70,10 @@ public class Context : Node
 
     public Pose4 GetTool()
     {
+        if (workWithFlange)
+        {
+            return new Pose4();
+        }
         if (tool is null)
         {
             return new Pose4();

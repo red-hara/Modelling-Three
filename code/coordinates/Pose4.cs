@@ -8,7 +8,7 @@ public struct Pose4
     public Pose4(Vector3 position = new Vector3(), float rotation = 0)
     {
         this.position = position;
-        this.rotation = rotation;
+        this.rotation = Mathf.Wrap(rotation, -180, 180);
     }
 
     public Pose4 Inverse()
@@ -40,7 +40,11 @@ public struct Pose4
                 new Vector3(0, 0, 1),
                 Mathf.Deg2Rad(self.rotation)
             ),
-            self.rotation + other.rotation
+            Mathf.Wrap(
+                self.rotation + other.rotation,
+                -180,
+                180
+            )
         );
     }
 
@@ -49,7 +53,7 @@ public struct Pose4
         return string.Format(
             "[{0}, {1}]",
             position,
-            Mathf.Rad2Deg(rotation)
+            rotation
         );
     }
 }

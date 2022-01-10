@@ -25,22 +25,15 @@ public class Joint : Command
     {
         this.controllable = controllable;
         this.context = context;
-        start = controllable.GetCurrentPosition();
-        start.pose *= context.Tool;
+        start = controllable.GetCurrentPosition() * context.Tool;
     }
     public State Process(float delta)
     {
         Generalized4? generalizedStart = controllable.Inverse(
-            new Target4(
-                start.pose * context.Tool.Inverse(),
-                start.flangeRevolutions
-            )
+            start * context.Tool.Inverse()
         );
         Generalized4? generalizedEnd = controllable.Inverse(
-            new Target4(
-                target.pose * context.Tool.Inverse(),
-                target.flangeRevolutions
-            )
+            target * context.Tool.Inverse()
         );
         if (generalizedStart is null || generalizedEnd is null)
         {

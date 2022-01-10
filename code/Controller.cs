@@ -49,7 +49,6 @@ public class Controller : Node
             currentCommand = ctx.commands.Dequeue();
             currentCommand.Init(control, ctx);
         }
-        // ctx.Update(delta);
 
         Trace trace = GetNode<Trace>(tcpTrace);
         Spatial controlSpatial = (Spatial)control;

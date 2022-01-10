@@ -8,4 +8,9 @@ public struct Target4
         this.pose = pose;
         this.flangeRevolutions = flangeRevolutions;
     }
+
+    public static Target4 operator *(Target4 target, Pose4 pose)
+    {
+        return new Target4(target.pose * pose, target.flangeRevolutions);
+    }
 }

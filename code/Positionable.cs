@@ -1,5 +1,3 @@
-using Godot;
-
 public interface Positionable
 {
     Generalized4? SetPosition(Target4 position);

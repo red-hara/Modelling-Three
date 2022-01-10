@@ -33,30 +33,31 @@ public class Robot : Spatial, Controllable
     [Export]
     public float A
     {
-        get => Mathf.Rad2Deg(generalized.a);
-        set => generalized.a = Mathf.Deg2Rad(value);
+        get => Mathf.Rad2Deg(targetGeneralized.a);
+        set => targetGeneralized.a = Mathf.Deg2Rad(value);
     }
 
     [Export]
     public float B
     {
-        get => Mathf.Rad2Deg(generalized.b);
-        set => generalized.b = Mathf.Deg2Rad(value);
+        get => Mathf.Rad2Deg(targetGeneralized.b);
+        set => targetGeneralized.b = Mathf.Deg2Rad(value);
     }
     [Export]
     public float C
     {
-        get => Mathf.Rad2Deg(generalized.c);
-        set => generalized.c = Mathf.Deg2Rad(value);
+        get => Mathf.Rad2Deg(targetGeneralized.c);
+        set => targetGeneralized.c = Mathf.Deg2Rad(value);
     }
     [Export]
     public float D
     {
-        get => Mathf.Rad2Deg(generalized.d);
-        set => generalized.d = Mathf.Deg2Rad(value);
+        get => Mathf.Rad2Deg(targetGeneralized.d);
+        set => targetGeneralized.d = Mathf.Deg2Rad(value);
     }
 
     private Generalized4 generalized = new Generalized4();
+    private Generalized4 targetGeneralized = new Generalized4();
 
     [Export]
     public NodePath end;
@@ -67,6 +68,7 @@ public class Robot : Spatial, Controllable
 
     public override void _Process(float delta)
     {
+        UpdateGeneralized(delta);
         float a = generalized.a;
         float b = generalized.b;
         float c = generalized.c;
@@ -89,14 +91,43 @@ public class Robot : Spatial, Controllable
                 Spatial endSpatial = GetNode<Spatial>(end);
                 Pose4 position = CalculateForward(generalized).pose;
                 endSpatial.Translation = position.position;
-                endSpatial.RotationDegrees = new Vector3(0, 0, position.rotation);
+                endSpatial.RotationDegrees = new Vector3(
+                    0,
+                    0,
+                    position.rotation
+                );
+            }
+        }
+    }
+
+    private void UpdateGeneralized(float delta)
+    {
+        Generalized4 velocities = MaximumJointVelocity();
+        for (int i = 0; i < 4; i++)
+        {
+            float deltaGeneralized = Mathf.Wrap(
+                targetGeneralized[i] - generalized[i],
+                -Mathf.Pi,
+                Mathf.Pi
+            );
+            if (
+                Mathf.Abs(deltaGeneralized) >
+                velocities[i] * delta + Mathf.Epsilon
+            )
+            {
+                generalized[i] +=
+                    Mathf.Sign(deltaGeneralized) * velocities[i] * delta;
+            }
+            else
+            {
+                generalized[i] += deltaGeneralized;
             }
         }
     }
 
     public Target4? SetJoints(Generalized4 generalized)
     {
-        this.generalized = generalized;
+        this.targetGeneralized = generalized;
         return CalculateForward(generalized);
     }
 
@@ -107,7 +138,7 @@ public class Robot : Spatial, Controllable
 
     public Generalized4 GetCurrentJoints()
     {
-        return generalized;
+        return targetGeneralized;
     }
 
     public Generalized4? SetPosition(Target4 position)
@@ -117,7 +148,7 @@ public class Robot : Spatial, Controllable
         {
             return null;
         }
-        generalized = solution.Value;
+        targetGeneralized = solution.Value;
         return solution;
     }
     public Generalized4? Inverse(Target4 position)
@@ -126,7 +157,7 @@ public class Robot : Spatial, Controllable
     }
     public Target4 GetCurrentPosition()
     {
-        return CalculateForward(generalized);
+        return CalculateForward(targetGeneralized);
     }
 
     public Generalized4 MaximumJointVelocity()

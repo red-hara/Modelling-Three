@@ -13,7 +13,8 @@
 end = NodePath("SimpleCone")
 
 [node name="SimpleCone" parent="Robot" instance=ExtResource( 5 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1910, 0, 1833 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1910, -0.000455379, 1833 )
+angle = 45.0
 
 [node name="Controller" type="Node" parent="."]
 script = ExtResource( 2 )
@@ -29,6 +30,8 @@ tool = NodePath("../Robot/SimpleCone")
 script = ExtResource( 3 )
 
 [node name="SphereCamera" parent="." instance=ExtResource( 6 )]
+radius = 4000.0
+beta = -45.0
 
 [node name="Decor" type="Spatial" parent="."]
 

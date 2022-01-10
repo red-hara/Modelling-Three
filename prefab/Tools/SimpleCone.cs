@@ -1,12 +1,13 @@
 using Godot;
 
+[Tool]
 public class SimpleCone : Spatial, Tool
 {
     [Export]
     public NodePath rotatingPart;
 
+    [Export]
     public float angle;
-
 
     public override void _Process(float delta)
     {
