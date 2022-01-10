@@ -138,7 +138,7 @@ public class Robot : Spatial, Controllable
 
     public Generalized4 GetCurrentJoints()
     {
-        return targetGeneralized;
+        return generalized;
     }
 
     public Generalized4? SetPosition(Target4 position)
@@ -157,7 +157,7 @@ public class Robot : Spatial, Controllable
     }
     public Target4 GetCurrentPosition()
     {
-        return CalculateForward(targetGeneralized);
+        return CalculateForward(generalized);
     }
 
     public Generalized4 MaximumJointVelocity()
