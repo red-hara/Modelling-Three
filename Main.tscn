@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://prefab/Robot/Robot.tscn" type="PackedScene" id=1]
 [ext_resource path="res://code/Controller.cs" type="Script" id=2]
@@ -11,14 +11,19 @@
 flags_unshaded = true
 albedo_color = Color( 1, 0, 0, 1 )
 
+[sub_resource type="SpatialMaterial" id=2]
+albedo_color = Color( 1, 0.760784, 0.760784, 1 )
+metallic = 1.0
+roughness = 0.29
+
 [node name="Main" type="Spatial"]
 
 [node name="Robot" parent="." instance=ExtResource( 1 )]
 end = NodePath("SimpleCone")
 
 [node name="SimpleCone" parent="Robot" instance=ExtResource( 5 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1910, 0, 1833 )
-angle = 45.0
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1910, 0.00045538, 1833 )
+angle = 90.0
 
 [node name="Controller" type="Node" parent="."]
 script = ExtResource( 2 )
@@ -56,3 +61,19 @@ depth = 10000.0
 transform = Transform( -4.37114e-08, 1, 4.37114e-08, 0, -4.37114e-08, 1, 1, 4.37114e-08, 1.91069e-15, 0, 0, 0 )
 shadow_enabled = true
 directional_shadow_max_distance = 10000.0
+
+[node name="DemoCube" type="CSGBox" parent="Decor"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2000, 0, 0 )
+width = 500.0
+height = 500.0
+depth = 500.0
+
+[node name="CSGSphere" type="CSGSphere" parent="Decor/DemoCube"]
+transform = Transform( 250, 0, 0, 0, 250, 0, 0, 0, 250, 0, 250, 0 )
+radial_segments = 32
+rings = 32
+material = SubResource( 2 )
+
+[node name="CSGCylinder" type="CSGCylinder" parent="Decor/DemoCube"]
+transform = Transform( 250, 0, 0, 0, 750, 0, 0, 0, 250, 0, -625, 0 )
+calculate_tangents = false

@@ -18,6 +18,6 @@ public class SimpleCone : Spatial, Tool
     public Pose4 GetToolCenterPoint()
     {
         return new Pose4(new Vector3(0, 500, 0), angle) *
-            new Pose4(new Vector3(0, 500, -50));
+            new Pose4(new Vector3(0, 500, -50), 90);
     }
 }

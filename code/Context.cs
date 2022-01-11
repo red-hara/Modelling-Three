@@ -10,13 +10,13 @@ public class Context : Node
     public NodePath part;
     public Pose4 Part
     {
-        get => GetPart();
+        get => GetPartOrigin();
     }
     [Export]
     public NodePath tool;
     public Pose4 Tool
     {
-        get => GetTool();
+        get => GetToolCenterPoint();
     }
 
     public bool workWithFlange;
@@ -35,32 +35,54 @@ public class Context : Node
     {
         AddCommand(new InputWait(KeyList.Space));
         AddCommand(
+            new ContextCommand(
+                (context) => { context.workWithFlange = true; }
+            )
+        );
+        AddCommand(
             new Joint(
-                new Target4(new Pose4(new Vector3(0, 2100, 100), 0), 0),
+                new Target4(new Pose4(new Vector3(2000, 0, 1000), 0), 0),
                 0.25f
             )
         );
         AddCommand(new InputWait(KeyList.Space));
-        AddCommand(
-            new Linear(new Pose4(new Vector3(0, 2100, 300), 120), 100, 45)
-        );
-        AddCommand(
-            new Linear(new Pose4(new Vector3(0, 2100, 500), 240), 100, 45)
-        );
-        AddCommand(
-            new Linear(new Pose4(new Vector3(0, 2100, 700), 0), 100, 45)
-        );
-        AddCommand(
-            new Linear(new Pose4(new Vector3(0, 2100, 900), 120), 100, 45)
-        );
+
         AddCommand(
             new ContextCommand(
-                (context) =>
-                {
-                    context.workWithFlange = !context.workWithFlange;
-                }
+                (context) => { context.workWithFlange = false; }
             )
         );
+        AddCommand(
+            new Linear(
+                new Pose4(new Vector3(1750, 250, 250), -45), 100, 90
+            )
+        );
+        AddCommand(
+            new Linear(
+                new Pose4(new Vector3(2250, 250, 250), -135), 100, 90
+            )
+        );
+        AddCommand(
+            new Linear(
+                new Pose4(new Vector3(2250, -250, 250), 135), 100, 90
+            )
+        );
+        AddCommand(
+            new Linear(
+                new Pose4(new Vector3(1750, -250, 250), 45), 100, 90
+            )
+        );
+        AddCommand(
+            new Linear(
+                new Pose4(new Vector3(1750, 250, 250), -45), 100, 90
+            )
+        );
+        AddCommand(
+            new Linear(
+                new Pose4(new Vector3(1750, 250, 500), -45), 100, 90
+            )
+        );
+
         AddCommand(
             new ContextCommand(
                 (context) => { context.GeneratePath(); }
@@ -68,7 +90,7 @@ public class Context : Node
         );
     }
 
-    public Pose4 GetTool()
+    public Pose4 GetToolCenterPoint()
     {
         if (workWithFlange)
         {
@@ -86,7 +108,7 @@ public class Context : Node
         return tcp.GetToolCenterPoint();
     }
 
-    public Pose4 GetPart()
+    public Pose4 GetPartOrigin()
     {
         if (part is null)
         {

@@ -31,11 +31,6 @@ public class Controller : Node
                     break;
                 case State.Done:
                     currentCommand = null;
-                    if (ctx.commands.Count > 0)
-                    {
-                        currentCommand = ctx.commands.Dequeue();
-                        currentCommand.Init(control, ctx);
-                    }
                     break;
                 case State.Error:
                     currentCommand = null;

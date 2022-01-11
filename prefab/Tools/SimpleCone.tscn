@@ -1,11 +1,7 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://prefab/Tools/SimpleCone.cs" type="Script" id=1]
 [ext_resource path="res://models/Axis/Axis.obj" type="ArrayMesh" id=2]
-
-[sub_resource type="SpatialMaterial" id=1]
-flags_unshaded = true
-albedo_color = Color( 1, 0, 0, 1 )
 
 [node name="SimpleCone" type="Spatial"]
 script = ExtResource( 1 )
@@ -26,21 +22,16 @@ radius = 50.0
 height = 500.0
 cone = true
 
-[node name="CSGSphere" type="CSGSphere" parent="CSGBox/Spatial/CSGCylinder"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 250, 0 )
-radius = 25.0
-material = SubResource( 1 )
-
-[node name="SpotLight" type="SpotLight" parent="CSGBox/Spatial/CSGCylinder/CSGSphere"]
-light_color = Color( 1, 0, 0, 1 )
-spot_range = 5000.0
-spot_angle = 1.0
-
-[node name="Axis" type="MeshInstance" parent="CSGBox/Spatial/CSGCylinder/CSGSphere"]
-transform = Transform( 10, 0, 0, 0, -4.37114e-07, -10, 0, 10, -4.37114e-07, 0, 0, 0 )
+[node name="Axis" type="MeshInstance" parent="CSGBox/Spatial/CSGCylinder"]
+transform = Transform( -4.37114e-07, 4.37114e-07, 10, 10, -4.37114e-07, 4.37114e-07, 4.37114e-07, 10, -4.37114e-07, 0, 250, 0 )
+cast_shadow = 0
 mesh = ExtResource( 2 )
-skeleton = NodePath("../../../../..")
+skeleton = NodePath("../../../..")
 material/0 = null
 material/1 = null
 material/2 = null
 material/3 = null
+
+[node name="OmniLight" type="OmniLight" parent="CSGBox/Spatial/CSGCylinder/Axis"]
+light_color = Color( 1, 1, 0.501961, 1 )
+omni_range = 250.0
