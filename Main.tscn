@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://prefab/Robot/Robot.tscn" type="PackedScene" id=1]
 [ext_resource path="res://code/Controller.cs" type="Script" id=2]
@@ -7,13 +7,17 @@
 [ext_resource path="res://prefab/Tools/SimpleCone.tscn" type="PackedScene" id=5]
 [ext_resource path="res://prefab/SphereCamera/SphereCamera.tscn" type="PackedScene" id=6]
 
+[sub_resource type="SpatialMaterial" id=1]
+flags_unshaded = true
+albedo_color = Color( 1, 0, 0, 1 )
+
 [node name="Main" type="Spatial"]
 
 [node name="Robot" parent="." instance=ExtResource( 1 )]
 end = NodePath("SimpleCone")
 
 [node name="SimpleCone" parent="Robot" instance=ExtResource( 5 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1910, -0.000455379, 1833 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1910, 0, 1833 )
 angle = 45.0
 
 [node name="Controller" type="Node" parent="."]
@@ -27,6 +31,7 @@ script = ExtResource( 4 )
 tool = NodePath("../Robot/SimpleCone")
 
 [node name="TcpTrace" type="ImmediateGeometry" parent="."]
+material_override = SubResource( 1 )
 script = ExtResource( 3 )
 
 [node name="SphereCamera" parent="." instance=ExtResource( 6 )]
