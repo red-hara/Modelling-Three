@@ -13,4 +13,9 @@ public struct Target4
     {
         return new Target4(target.pose * pose, target.flangeRevolutions);
     }
+
+    public static Target4 operator *(Pose4 pose, Target4 target)
+    {
+        return new Target4(pose * target.pose, target.flangeRevolutions);
+    }
 }

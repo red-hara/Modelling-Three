@@ -58,6 +58,11 @@ public class Context : Node
             )
         );
         AddCommand(
+            new ContextCommand(
+                (context) => { context.TurnToolOn(); }
+            )
+        );
+        AddCommand(
             new Linear(
                 new Pose4(new Vector3(2250, 250, 250), -135), 100, 90
             )
@@ -75,6 +80,11 @@ public class Context : Node
         AddCommand(
             new Linear(
                 new Pose4(new Vector3(1750, 250, 250), -45), 100, 90
+            )
+        );
+        AddCommand(
+            new ContextCommand(
+                (context) => { context.TurnToolOff(); }
             )
         );
         AddCommand(
@@ -120,5 +130,15 @@ public class Context : Node
         }
         Part pt = GetNode<Part>(part);
         return pt.GetOrigin();
+    }
+
+    public void TurnToolOn()
+    {
+        GetNode<SimpleCone>(tool).TurnOn();
+    }
+
+    public void TurnToolOff()
+    {
+        GetNode<SimpleCone>(tool).TurnOff();
     }
 }

@@ -6,6 +6,7 @@
 [node name="SimpleCone" type="Spatial"]
 script = ExtResource( 1 )
 rotatingPart = NodePath("CSGBox/Spatial")
+light = NodePath("CSGBox/Spatial/CSGCylinder/Axis/OmniLight")
 
 [node name="CSGBox" type="CSGBox" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 250, -50 )
@@ -33,5 +34,6 @@ material/2 = null
 material/3 = null
 
 [node name="OmniLight" type="OmniLight" parent="CSGBox/Spatial/CSGCylinder/Axis"]
+visible = false
 light_color = Color( 1, 1, 0.501961, 1 )
 omni_range = 250.0
