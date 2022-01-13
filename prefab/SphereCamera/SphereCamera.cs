@@ -6,62 +6,61 @@ public class SphereCamera : Spatial
     public NodePath camera;
 
     [Export]
-    public float radius = 5000;
-    [Export]
-    public float slide = 0;
-
-    [Export]
     public float alpha;
     [Export]
     public float beta;
 
     [Export]
-    float angularVelocity = 45;
+    float angularVelocity = 15;
     [Export]
     float linearVelocity = 500;
 
     public override void _Process(float delta)
     {
         Camera cam = GetNode<Camera>(camera);
-        cam.Translation = new Vector3(slide, 0, radius);
+        cam.Translation = new Vector3(0, 0, 0);
         RotationDegrees = new Vector3(beta, alpha, 0);
 
-        if (Input.IsPhysicalKeyPressed(((int)KeyList.Shift)))
+        if (!Input.IsPhysicalKeyPressed(((int)KeyList.Shift)))
         {
             if (Input.IsActionPressed("camera_left"))
             {
-                slide -= delta * linearVelocity;
+                Translation += delta *
+                    (Transform.basis.Xform(new Vector3(-linearVelocity, 0, 0)));
             }
             if (Input.IsActionPressed("camera_right"))
             {
-                slide += delta * linearVelocity;
+                Translation += delta *
+                    (Transform.basis.Xform(new Vector3(linearVelocity, 0, 0)));
             }
-            if (Input.IsActionPressed("camera_up"))
+            if (Input.IsActionPressed("camera_forward"))
             {
-                radius -= delta * linearVelocity;
+                Translation += delta *
+                    (Transform.basis.Xform(new Vector3(0, 0, -linearVelocity)));
             }
-            if (Input.IsActionPressed("camera_down"))
+            if (Input.IsActionPressed("camera_back"))
             {
-                radius += delta * linearVelocity;
+                Translation += delta *
+                    (Transform.basis.Xform(new Vector3(0, 0, linearVelocity)));
             }
         }
         else
         {
             if (Input.IsActionPressed("camera_left"))
             {
-                alpha -= delta * angularVelocity;
+                alpha += delta * angularVelocity;
             }
             if (Input.IsActionPressed("camera_right"))
             {
-                alpha += delta * angularVelocity;
+                alpha -= delta * angularVelocity;
             }
-            if (Input.IsActionPressed("camera_up"))
-            {
-                beta -= delta * angularVelocity;
-            }
-            if (Input.IsActionPressed("camera_down"))
+            if (Input.IsActionPressed("camera_forward"))
             {
                 beta += delta * angularVelocity;
+            }
+            if (Input.IsActionPressed("camera_back"))
+            {
+                beta -= delta * angularVelocity;
             }
         }
     }
