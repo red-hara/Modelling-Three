@@ -33,71 +33,28 @@ public class Context : Node
 
     public void GeneratePath()
     {
-        AddCommand(new InputWait(KeyList.Space));
-        AddCommand(
-            new ContextCommand(
-                (context) => { context.workWithFlange = true; }
-            )
-        );
-        AddCommand(
-            new Joint(
-                new Target4(new Pose4(new Vector3(2000, 0, 1000), 0), 0),
-                0.25f
-            )
-        );
-        AddCommand(new InputWait(KeyList.Space));
+        InputWait(KeyList.Space);
+        ContextCommand((context) => { context.workWithFlange = true; });
+        Joint(new Target4(new Pose4(new Vector3(2000, 0, 1000), 0), 0), 0.25f);
+        InputWait(KeyList.Space);
+        ContextCommand((context) => { context.workWithFlange = false; });
+        Linear(new Pose4(new Vector3(1750, 250, 250), -90), 100, 90);
+        ContextCommand((context) => { context.TurnToolOn(); });
 
-        AddCommand(
-            new ContextCommand(
-                (context) => { context.workWithFlange = false; }
-            )
-        );
-        AddCommand(
-            new Linear(
-                new Pose4(new Vector3(1750, 250, 250), -45), 100, 90
-            )
-        );
-        AddCommand(
-            new ContextCommand(
-                (context) => { context.TurnToolOn(); }
-            )
-        );
-        AddCommand(
-            new Linear(
-                new Pose4(new Vector3(2250, 250, 250), -135), 100, 90
-            )
-        );
-        AddCommand(
-            new Linear(
-                new Pose4(new Vector3(2250, -250, 250), 135), 100, 90
-            )
-        );
-        AddCommand(
-            new Linear(
-                new Pose4(new Vector3(1750, -250, 250), 45), 100, 90
-            )
-        );
-        AddCommand(
-            new Linear(
-                new Pose4(new Vector3(1750, 250, 250), -45), 100, 90
-            )
-        );
-        AddCommand(
-            new ContextCommand(
-                (context) => { context.TurnToolOff(); }
-            )
-        );
-        AddCommand(
-            new Linear(
-                new Pose4(new Vector3(1750, 250, 500), -45), 100, 90
-            )
-        );
+        Linear(new Pose4(new Vector3(2250, 250, 250), -90), 100, 90);
+        Linear(new Pose4(new Vector3(2250, 250, 250), 180), 100, 90);
 
-        AddCommand(
-            new ContextCommand(
-                (context) => { context.GeneratePath(); }
-            )
-        );
+        Linear(new Pose4(new Vector3(2250, -250, 250), 180), 100, 90);
+        Linear(new Pose4(new Vector3(2250, -250, 250), 90), 100, 90);
+
+        Linear(new Pose4(new Vector3(1750, -250, 250), 90), 100, 90);
+        Linear(new Pose4(new Vector3(1750, -250, 250), 0), 100, 90);
+
+        Linear(new Pose4(new Vector3(1750, 250, 250), 0), 100, 90);
+
+        ContextCommand((context) => { context.TurnToolOff(); });
+        Linear(new Pose4(new Vector3(1750, 250, 500), 0), 100, 90);
+        ContextCommand((context) => { context.GeneratePath(); });
     }
 
     public Pose4 GetToolCenterPoint()
@@ -140,5 +97,32 @@ public class Context : Node
     public void TurnToolOff()
     {
         GetNode<SimpleCone>(tool).TurnOff();
+    }
+
+    public void Linear(
+        Pose4 target,
+        float linearVelocity,
+        float angularVelocity
+    )
+    {
+        AddCommand(new Linear(target, linearVelocity, angularVelocity));
+    }
+
+    public void Joint(
+        Target4 target,
+        float velocity
+    )
+    {
+        AddCommand(new Joint(target, velocity));
+    }
+
+    public void ContextCommand(ContextCommand.UpdateContext command)
+    {
+        AddCommand(new ContextCommand(command));
+    }
+
+    public void InputWait(KeyList list)
+    {
+        AddCommand(new InputWait(KeyList.Space));
     }
 }

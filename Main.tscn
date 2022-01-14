@@ -22,7 +22,7 @@ roughness = 0.29
 end = NodePath("SimpleCone")
 
 [node name="SimpleCone" parent="Robot" instance=ExtResource( 5 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1910, 0, 1833 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1910, 0.00045538, 1833 )
 angle = 90.0
 
 [node name="Controller" type="Node" parent="."]
@@ -40,7 +40,9 @@ material_override = SubResource( 1 )
 script = ExtResource( 3 )
 
 [node name="SphereCamera" parent="." instance=ExtResource( 6 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1000, 2800 )
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3500, 500, 0 )
+alpha = 90.0
+angularVelocity = 30.0
 
 [node name="Decor" type="Spatial" parent="."]
 
@@ -67,12 +69,32 @@ width = 500.0
 height = 500.0
 depth = 500.0
 
-[node name="CSGSphere" type="CSGSphere" parent="Decor/DemoCube"]
-transform = Transform( 250, 0, 0, 0, 250, 0, 0, 0, 250, 0, 250, 0 )
+[node name="CSGCylinder" type="CSGCylinder" parent="Decor/DemoCube"]
+transform = Transform( 250, 0, 0, 0, 750, 0, 0, 0, 250, 0, -625, 0 )
+calculate_tangents = false
+
+[node name="Spheres" type="Spatial" parent="Decor/DemoCube"]
+
+[node name="CSGSphere" type="CSGSphere" parent="Decor/DemoCube/Spheres"]
+transform = Transform( 100, 0, 0, 0, 100, 0, 0, 0, 100, 150, 250, 150 )
 radial_segments = 32
 rings = 32
 material = SubResource( 2 )
 
-[node name="CSGCylinder" type="CSGCylinder" parent="Decor/DemoCube"]
-transform = Transform( 250, 0, 0, 0, 750, 0, 0, 0, 250, 0, -625, 0 )
-calculate_tangents = false
+[node name="CSGSphere2" type="CSGSphere" parent="Decor/DemoCube/Spheres"]
+transform = Transform( 100, 0, 0, 0, 100, 0, 0, 0, 100, 150, 275, -150 )
+radial_segments = 32
+rings = 32
+material = SubResource( 2 )
+
+[node name="CSGSphere3" type="CSGSphere" parent="Decor/DemoCube/Spheres"]
+transform = Transform( 100, 0, 0, 0, 100, 0, 0, 0, 100, -150, 300, 150 )
+radial_segments = 32
+rings = 32
+material = SubResource( 2 )
+
+[node name="CSGSphere4" type="CSGSphere" parent="Decor/DemoCube/Spheres"]
+transform = Transform( 100, 0, 0, 0, 100, 0, 0, 0, 100, -150, 325, -150 )
+radial_segments = 32
+rings = 32
+material = SubResource( 2 )
