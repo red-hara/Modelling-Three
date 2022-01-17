@@ -72,6 +72,11 @@ public class Joint : Command
         // Get maximum time.
         float maximum = times.Max();
 
+        if (maximum <= 0.0)
+        {
+            return State.Done;
+        }
+
         // Increase the progress.
         progress += delta / maximum;
 
