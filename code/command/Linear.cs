@@ -67,9 +67,15 @@ public class Linear : Command
         // The ^-1 operator analog for Pose4 is Inverse operation.
         Pose4 deltaPose = start.pose.Inverse() * target;
 
+        float length = deltaPose.position.Length();
+        if (length <= 0.0)
+        {
+            return State.Done;
+        }
+
         // Calculate times required to perform the linear motion and the angular
         // motion individually.
-        float lengthTime = deltaPose.position.Length() / linearVelocity;
+        float lengthTime = length / linearVelocity;
         float angleTime = Mathf.Abs(
             Mathf.Wrap(deltaPose.rotation, -180, 180)
         ) / angularVelocity;
