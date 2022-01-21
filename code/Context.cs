@@ -1,26 +1,39 @@
 using System.Collections.Generic;
 using Godot;
 
+/// <summary>The robot execution context.</summary>
 public class Context : Node
 {
+    /// <summary>List on enqueued commands.</summary>
     public Queue<Command> commands = new Queue<Command>();
 
-    public Pose4 origin;
+    /// <summary>Path to the <c>Part</c> attached to the robot base.</summary>
     [Export]
     public NodePath part;
+    /// <summary><c>Part</c> to work with.</summary>
     public Pose4 Part
     {
+        // It is possible to get part, but not to set it.
         get => GetPartOrigin();
     }
+
+    /// <summary>Path to the <c>Tool</c> attached to the robot.</summary>
     [Export]
     public NodePath tool;
+
+    /// <summary><c>Tool</c> to work with.</summary>
     public Pose4 Tool
     {
+        // It is possible to get tool, but not to set it.
         get => GetToolCenterPoint();
     }
 
-    public bool workWithFlange;
+    /// <summary>Flag to mark that the <c>Context</c> shall work using
+    /// tool.<summary>
+    public bool workWithTool;
 
+    /// <summary>Add command to the command list.</summary>
+    /// <param name="command">The <c>Command</c> to be enqueued.</param>
     public void AddCommand(Command command)
     {
         commands.Enqueue(command);
@@ -31,13 +44,14 @@ public class Context : Node
 
     }
 
+    /// <summary>Generate path by adding commands to the queue.</summary>
     public void GeneratePath()
     {
         InputWait(KeyList.Space);
-        ContextCommand((context) => { context.workWithFlange = true; });
+        ContextCommand((context) => { context.workWithTool = false; });
         Joint(new Target4(new Pose4(new Vector3(2000, 0, 1000), 0), 0), 0.25f);
         InputWait(KeyList.Space);
-        ContextCommand((context) => { context.workWithFlange = false; });
+        ContextCommand((context) => { context.workWithTool = true; });
         Linear(new Pose4(new Vector3(1750, 250, 250), -90), 100, 90);
         ContextCommand((context) => { context.TurnToolOn(); });
 
@@ -57,9 +71,15 @@ public class Context : Node
         ContextCommand((context) => { context.GeneratePath(); });
     }
 
+    /// <summary>Get current TCP geometry.</summary>
+    /// <returns>TCP in relation to the flange.</returns>
     public Pose4 GetToolCenterPoint()
     {
-        if (workWithFlange)
+        // Return zero Pose4 if either
+        // - we are working with flange
+        // - no tool path is set
+        // - the tool path is empty
+        if (!workWithTool)
         {
             return new Pose4();
         }
@@ -75,8 +95,13 @@ public class Context : Node
         return tcp.GetToolCenterPoint();
     }
 
+    /// <summary>Get current part origin geometry.</summary>
+    /// <returns>Part origin in relation to the robot base.</summary>
     public Pose4 GetPartOrigin()
     {
+        // Return zero Pose4 if either
+        // - no part path is set
+        // - the part path is empty
         if (part is null)
         {
             return new Pose4();
@@ -89,16 +114,24 @@ public class Context : Node
         return pt.GetOrigin();
     }
 
+    /// <summary>Turn <c>SimpleConeTool</c> on.</summary>
     public void TurnToolOn()
     {
         GetNode<SimpleConeTool>(tool).TurnOn();
     }
 
+    /// <summary>Turn <c>SimpleConeTool</c> off.</summary>
     public void TurnToolOff()
     {
         GetNode<SimpleConeTool>(tool).TurnOff();
     }
 
+    /// <summary>Enqueue <c>Linear</c> command.</summary>
+    /// <param name="target">Target <c>Pose4</c> for this motion.</param>
+    /// <param name="linearVelocity">Maximum motion linear velocity, millimeter
+    /// per second.</param>
+    /// <param name="angularVelocity">Maximum motion angular velocity, degree
+    /// per second.</param>
     public void Linear(
         Pose4 target,
         float linearVelocity,
@@ -108,6 +141,10 @@ public class Context : Node
         AddCommand(new Linear(target, linearVelocity, angularVelocity));
     }
 
+    /// <summary>Enqueue <c>Joint</c> command.</summary>
+    /// <param name="target">Target <c>Target4</c> for this motion.</param>
+    /// <param name="velocity">Motion velocity, fraction, in (1, 0]
+    /// range.<param>
     public void Joint(
         Target4 target,
         float velocity
@@ -116,13 +153,18 @@ public class Context : Node
         AddCommand(new Joint(target, velocity));
     }
 
+    /// <summary>Enqueue <c>ContextCommand</c> command.</summary>
+    /// <param name="command">The <c>UpdateContext</c> delegate to be called on
+    /// this <c>Context</c>.</param>
     public void ContextCommand(ContextCommand.UpdateContext command)
     {
         AddCommand(new ContextCommand(command));
     }
 
-    public void InputWait(KeyList list)
+    /// <summary>Enqueue <c>InputWait</c> command.</summary>
+    /// <param name="key">The key (from the <c>KeyList</c>) to wait for.</param>
+    public void InputWait(KeyList key)
     {
-        AddCommand(new InputWait(KeyList.Space));
+        AddCommand(new InputWait(key));
     }
 }
