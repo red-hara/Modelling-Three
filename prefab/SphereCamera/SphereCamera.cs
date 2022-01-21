@@ -43,6 +43,14 @@ public class SphereCamera : Spatial
                 Translation += delta *
                     (Transform.basis.Xform(new Vector3(0, 0, linearVelocity)));
             }
+            if (Input.IsActionPressed("camera_up"))
+            {
+                Translation += delta * new Vector3(0, linearVelocity, 0);
+            }
+            if (Input.IsActionPressed("camera_down"))
+            {
+                Translation += delta * new Vector3(0, -linearVelocity, 0);
+            }
         }
         else
         {

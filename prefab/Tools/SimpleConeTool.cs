@@ -1,7 +1,7 @@
 using Godot;
 
 [Tool]
-public class SimpleCone : Spatial, Tool
+public class SimpleConeTool : Spatial, Tool
 {
     [Export]
     public NodePath rotatingPart;

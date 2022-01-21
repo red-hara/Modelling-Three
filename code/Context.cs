@@ -91,12 +91,12 @@ public class Context : Node
 
     public void TurnToolOn()
     {
-        GetNode<SimpleCone>(tool).TurnOn();
+        GetNode<SimpleConeTool>(tool).TurnOn();
     }
 
     public void TurnToolOff()
     {
-        GetNode<SimpleCone>(tool).TurnOff();
+        GetNode<SimpleConeTool>(tool).TurnOff();
     }
 
     public void Linear(
