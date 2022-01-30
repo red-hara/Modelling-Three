@@ -1,28 +1,31 @@
 using Godot;
 
-public class SphereCamera : Spatial
+/// <summary>The Camera with keyboard control.</summary>
+public class FlyingCamera : Spatial
 {
-    [Export]
-    public NodePath camera;
-
+    /// <summary>Rotation around the vertical axis, degrees.</summary>
     [Export]
     public float alpha;
+
+    /// <summary>Rotation around the horizontal axis, degrees.</summary>
     [Export]
     public float beta;
 
+    /// <summary>Rotation velocity, degrees per second.</summary>
     [Export]
     float angularVelocity = 15;
+
+    /// <summary>Linear velocity, millimeter per second.</summary>
     [Export]
     float linearVelocity = 500;
 
     public override void _Process(float delta)
     {
-        Camera cam = GetNode<Camera>(camera);
-        cam.Translation = new Vector3(0, 0, 0);
         RotationDegrees = new Vector3(beta, alpha, 0);
 
         if (!Input.IsPhysicalKeyPressed(((int)KeyList.Shift)))
         {
+            // FPV translations are performed in the local space.
             if (Input.IsActionPressed("camera_left"))
             {
                 Translation += delta *
@@ -43,6 +46,7 @@ public class SphereCamera : Spatial
                 Translation += delta *
                     (Transform.basis.Xform(new Vector3(0, 0, linearVelocity)));
             }
+            // Ascention and decention are in global space.
             if (Input.IsActionPressed("camera_up"))
             {
                 Translation += delta * new Vector3(0, linearVelocity, 0);

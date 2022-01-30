@@ -5,7 +5,7 @@
 [ext_resource path="res://code/Trace.cs" type="Script" id=3]
 [ext_resource path="res://code/Context.cs" type="Script" id=4]
 [ext_resource path="res://prefab/Tools/SimpleConeTool.tscn" type="PackedScene" id=5]
-[ext_resource path="res://prefab/SphereCamera/SphereCamera.tscn" type="PackedScene" id=6]
+[ext_resource path="res://prefab/FlyingCamera/FlyingCamera.tscn" type="PackedScene" id=6]
 
 [sub_resource type="SpatialMaterial" id=1]
 flags_unshaded = true
@@ -22,7 +22,7 @@ roughness = 0.29
 end = NodePath("SimpleConeTool")
 
 [node name="SimpleConeTool" parent="Robot" instance=ExtResource( 5 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1910, 0.00045538, 1833 )
+transform = Transform( 1, 1.06526e-06, 0, -1.06526e-06, 1, 0, 0, 0, 1, 1910, -0.000910759, 1833 )
 angle = 90.0
 
 [node name="Controller" type="Node" parent="."]
@@ -39,7 +39,7 @@ tool = NodePath("../Robot/SimpleConeTool")
 material_override = SubResource( 1 )
 script = ExtResource( 3 )
 
-[node name="SphereCamera" parent="." instance=ExtResource( 6 )]
+[node name="FlyingCamera" parent="." instance=ExtResource( 6 )]
 transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3500, 500, 0 )
 alpha = 90.0
 angularVelocity = 30.0
