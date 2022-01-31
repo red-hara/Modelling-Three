@@ -1,35 +1,73 @@
 using Godot;
 
+/// <summary>The <c>Robot</c> node represents 4-DoF robot. Its drives have
+/// instant velocity gain.</summary>
 [Tool]
 public class Robot : Spatial, Controllable
 {
+    /// <summary>The distance from base to the shoulder.</summary>
     public const float lift = 800;
+
+    /// <summary>The horizontal distance from the base rotation axis to the
+    /// shoulder axis.</summary>
     public const float protrusion = 300;
+
+    /// <summary>The distance from the shoulder axis to the elbow
+    /// axis.</summary?
     public const float shoulderLength = 1280;
+
+    /// <summary>The distance from the elbow axis to the horizontal wrist
+    /// axis.</summary>
     public const float forearmLength = 1350;
+
+    /// <summary>The distance from horizontal wrist axis to the vertical flange
+    /// axis.</summary>
     public const float wristProtrusion = 260;
+
+    /// <summaryThe descent from horizontal wrist axis to the flange.</summary>
     public const float wristDescent = 247;
 
+    /// <summary>The path to the column part in scene.</summary>
     [Export]
     public NodePath column;
+
+    /// <summary>The path to the shoulder part in scene.</summary>
     [Export]
     public NodePath shoulder;
+
+    /// <summary>The path to the forearm part in scene.</summary>
     [Export]
     public NodePath forearm;
+
+    /// <summary>The path to the wrist part in scene.</summary>
     [Export]
     public NodePath wrist;
+
+    /// <summary>The path to the flange part in scene.</summary>
     [Export]
     public NodePath flange;
+
+    /// <summary>The path to the connector part in scene.</summary>
     [Export]
     public NodePath connector;
+
+    /// <summary>The path to the wrist connector part in scene.</summary>
     [Export]
     public NodePath wristConnector;
+
+    /// <summary>The path to the mover part in scene.</summary>
     [Export]
     public NodePath mover;
+
+    /// <summary>The path to the forearm connector part in scene.</summary>
     [Export]
     public NodePath forearmConnector;
+
+    /// <summary>The path to the column connector part in scene.</summary>
     [Export]
     public NodePath columnConnector;
+
+    /// <summary>The first generalized coordinate, degrees.</summary>
     [Export]
     public float A
     {
@@ -37,18 +75,23 @@ public class Robot : Spatial, Controllable
         set => targetGeneralized.a = Mathf.Deg2Rad(value);
     }
 
+    /// <summary>The second generalized coordinate, degrees.</summary>
     [Export]
     public float B
     {
         get => Mathf.Rad2Deg(targetGeneralized.b);
         set => targetGeneralized.b = Mathf.Deg2Rad(value);
     }
+
+    /// <summary>The third generalized coordinate, degrees.</summary>
     [Export]
     public float C
     {
         get => Mathf.Rad2Deg(targetGeneralized.c);
         set => targetGeneralized.c = Mathf.Deg2Rad(value);
     }
+
+    /// <summary>The fourth generalized coordinate, degrees.</summary>
     [Export]
     public float D
     {
@@ -56,15 +99,16 @@ public class Robot : Spatial, Controllable
         set => targetGeneralized.d = Mathf.Deg2Rad(value);
     }
 
+    /// <summary>Current generalized coordinates of this model.</summary>
     private Generalized4 generalized = new Generalized4();
+
+    /// <summary>Target generalized value of this model.</summary>
     private Generalized4 targetGeneralized = new Generalized4();
 
+    /// <summary>The path to the <c>Spatial</c> attached to the
+    /// flange.</summary>
     [Export]
     public NodePath end;
-    public override void _Ready()
-    {
-
-    }
 
     public override void _Process(float delta)
     {
@@ -84,6 +128,7 @@ public class Robot : Spatial, Controllable
         GetNode<Spatial>(forearmConnector).Rotation = new Vector3(0, b - c, 0);
         GetNode<Spatial>(columnConnector).Rotation = new Vector3(0, b, 0);
 
+        // Try updating end position only if it is present.
         if (!(end is null))
         {
             if (!end.IsEmpty())
@@ -100,6 +145,9 @@ public class Robot : Spatial, Controllable
         }
     }
 
+    /// <summary>Simulate drives operation. Each drive moves with its maximum
+    /// velocity to the target position.</summary>
+    /// <param name="delta">The time passed, seconds.</param>
     private void UpdateGeneralized(float delta)
     {
         Generalized4 velocities = MaximumJointVelocity();
@@ -170,6 +218,10 @@ public class Robot : Spatial, Controllable
         );
     }
 
+    /// <summary>Solve the forward kinematics problem.</summary>
+    /// <param name="generalized">Generalized coordinates to solve
+    /// for.</param>
+    /// <returns>Flange position.</returns>
     private static Target4 CalculateForward(Generalized4 generalized)
     {
         Transform pose = new Transform(
@@ -196,6 +248,10 @@ public class Robot : Spatial, Controllable
         return new Target4(pose4, rotations);
     }
 
+
+    /// <summary>Solve the inverse kinematics problem.</summary>
+    /// <param name="target">The target flange position.</param>
+    /// <returns>Solution if present.</returns>
     private static Generalized4? CalculateInverse(Target4 target)
     {
         float a = Mathf.Atan2(
