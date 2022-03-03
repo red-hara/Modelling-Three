@@ -16,10 +16,12 @@ public class InputWait : Command
     {
         this.key = key;
     }
+
     public void Init(Controllable controllable, Context context)
     {
         hold.Init(controllable, context);
     }
+
     public State Process(float delta)
     {
         // Check if internal PositionHold has failed.

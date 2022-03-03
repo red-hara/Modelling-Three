@@ -22,9 +22,9 @@ public class Joint : Command
     private float progress;
 
     /// <summary>Create new <c>Joint</c> command.</summary>
-    /// <param name="target">The robot target.<param>
+    /// <param name="target">The robot target.</param>
     /// <param name="velocity">The motion velocity, must be in range
-    /// (0, 1].<param>
+    /// (0, 1].</param>
     public Joint(Target4 target, float velocity)
     {
         // Note that the target is Target4 and stores the amount of flange
@@ -46,6 +46,7 @@ public class Joint : Command
         // combine the flange position and the TCP position. 
         start = controllable.GetCurrentPosition() * context.Tool;
     }
+
     public State Process(float delta)
     {
         // Try calculating generalized positions for the start and target

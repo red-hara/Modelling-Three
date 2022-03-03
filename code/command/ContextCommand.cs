@@ -10,7 +10,7 @@ public class ContextCommand : Command
 
     /// <summary>Create new <c>ContexCommand</c>.</summary>
     /// <param name="updater">The delegate to be called durinc this command
-    /// execution.</summary>
+    /// execution.</param>
     public ContextCommand(UpdateContext updater)
     {
         this.updater = updater;
@@ -20,6 +20,7 @@ public class ContextCommand : Command
     {
         this.context = context;
     }
+
     public State Process(float delta)
     {
         // Execute the updater passing current context as an argument.

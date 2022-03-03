@@ -19,6 +19,7 @@ public class PositionHold : Command
         // geometry information.
         target = controllable.GetCurrentPosition() * context.Tool;
     }
+
     public State Process(float delta)
     {
         // Calculate current flange position.

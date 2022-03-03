@@ -18,6 +18,7 @@ public class Idle : Command
     }
 
     public void Init(Controllable controllable, Context context) { }
+
     public State Process(float delta)
     {
         // Increase the counter and if it's greater than total mark state as
