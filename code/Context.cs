@@ -144,7 +144,7 @@ public class Context : Node
     /// <summary>Enqueue <c>Joint</c> command.</summary>
     /// <param name="target">Target <c>Target4</c> for this motion.</param>
     /// <param name="velocity">Motion velocity, fraction, in (1, 0]
-    /// range.<param>
+    /// range.</param>
     public void Joint(
         Target4 target,
         float velocity
