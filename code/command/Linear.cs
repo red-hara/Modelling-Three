@@ -68,7 +68,7 @@ public class Linear : Command
         Pose4 deltaPose = start.pose.Inverse() * target;
 
         float length = deltaPose.position.Length();
-        if (length <= 0.0)
+        if (length <= 0.0 && Mathf.Abs(deltaPose.rotation) <= 0.0)
         {
             return State.Done;
         }
@@ -81,7 +81,7 @@ public class Linear : Command
         ) / angularVelocity;
 
         // Update progress taking in mind that both parts of motion should
-        // finish simultaneously;
+        // finish simultaneously.
         progress += delta / Mathf.Max(lengthTime, angleTime);
         if (progress >= 1)
         {
