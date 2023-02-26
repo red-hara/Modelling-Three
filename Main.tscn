@@ -22,7 +22,7 @@ roughness = 0.29
 end = NodePath("SimpleConeTool")
 
 [node name="SimpleConeTool" parent="Robot" instance=ExtResource( 5 )]
-transform = Transform( 1, 1.06526e-06, 0, -1.06526e-06, 1, 0, 0, 0, 1, 1910, -0.000910759, 1833 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1910, -0.000455379, 1833 )
 angle = 90.0
 
 [node name="Controller" type="Node" parent="."]
@@ -65,16 +65,13 @@ shadow_enabled = true
 directional_shadow_max_distance = 10000.0
 
 [node name="DemoCube" type="CSGBox" parent="Decor"]
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 2000, 0, 0 )
+transform = Transform( 1, 0, 0, 0, 1, -1.06581e-14, 0, 1.06581e-14, 1, 2000, 0, 0 )
 width = 500.0
 height = 500.0
 depth = 500.0
 
-[node name="CSGCylinder" type="CSGCylinder" parent="Decor/DemoCube"]
-transform = Transform( 250, 0, 0, 0, 750, 0, 0, 0, 250, 0, -625, 0 )
-calculate_tangents = false
-
 [node name="Spheres" type="Spatial" parent="Decor/DemoCube"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0 )
 
 [node name="CSGSphere" type="CSGSphere" parent="Decor/DemoCube/Spheres"]
 transform = Transform( 100, 0, 0, 0, 100, 0, 0, 0, 100, 150, 250, 150 )
@@ -99,3 +96,7 @@ transform = Transform( 100, 0, 0, 0, 100, 0, 0, 0, 100, -150, 325, -150 )
 radial_segments = 32
 rings = 32
 material = SubResource( 2 )
+
+[node name="CSGCylinder" type="CSGCylinder" parent="Decor"]
+transform = Transform( 250, 0, 0, 0, -3.27835e-05, -250, 0, 750, -1.09278e-05, 2000, 2.73196e-05, -625 )
+calculate_tangents = false
